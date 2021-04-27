@@ -7,19 +7,21 @@ import android.util.Log
 import android.view.View
 import android.webkit.*
 import android.widget.Button
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.faltenreich.skeletonlayout.Skeleton
 import com.path_studio.moviecatalogue.R
-import com.path_studio.moviecatalogue.data.TvShowEntity
+import com.path_studio.moviecatalogue.data.source.remote.response.DetailTvShowResponse
 import com.path_studio.moviecatalogue.databinding.ActivityDetailTvShowBinding
 import com.path_studio.moviecatalogue.util.Utils
 
 class DetailTvShowActivity : AppCompatActivity() {
+
+    private val detailTvShowViewModel: DetailTvShowViewModel by viewModels()
 
     private lateinit var binding: ActivityDetailTvShowBinding
     private lateinit var skeleton: Skeleton
@@ -41,19 +43,22 @@ class DetailTvShowActivity : AppCompatActivity() {
         showYoutubeLoading(true)
 
         //prepare view model for show Tv Show Details
-        val viewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory())[DetailTvShowViewModel::class.java]
 
         val extras = intent.extras
         if (extras != null) {
             val showId = extras.getLong(EXTRA_TV_SHOW)
             Log.e("showId", showId.toString())
             if (showId != 0L) {
-                viewModel.setSelectedShow(showId)
-                val showDetails = viewModel.getShows()
+                detailTvShowViewModel.setSelectedShow(showId)
+                val showDetails = detailTvShowViewModel.detailShow
 
-                val listOfSeason = showDetails.seasonDetails
+                val listOfSeason = detailTvShowViewModel.listSeason
                 val seasonAdapter = SeasonDetailAdapter()
-                seasonAdapter.setSeason(listOfSeason)
+
+                listOfSeason.observe(this, { season ->
+                    seasonAdapter.setSeason(season)
+                    seasonAdapter.notifyDataSetChanged()
+                })
 
                 with(binding.rvSeasonDetail) {
                     layoutManager = LinearLayoutManager(context)
@@ -62,7 +67,9 @@ class DetailTvShowActivity : AppCompatActivity() {
                     showLoading(false)
                 }
 
-                showDetailShow(showDetails)
+                showDetails.observe(this, { detail ->
+                    showDetailShow(detail)
+                })
             }
         }
 
@@ -72,22 +79,27 @@ class DetailTvShowActivity : AppCompatActivity() {
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")
-    private fun showDetailShow(tvShowEntity: TvShowEntity) {
-        if (tvShowEntity.title.isNotEmpty()){
+    private fun showDetailShow(tvShowEntity: DetailTvShowResponse) {
+        if (!tvShowEntity.originalName.equals("") && tvShowEntity.originalName != null){
             showLoading(false)
 
-            binding.showTopTitle.text = tvShowEntity.title
-            binding.showTitle.text = tvShowEntity.title
+            binding.showTopTitle.text = tvShowEntity.originalName
+            binding.showTitle.text = tvShowEntity.originalName
             binding.showSinopsis.text = tvShowEntity.overview
 
-            binding.showReleaseDate.text = tvShowEntity.seasonDetails[tvShowEntity.seasonDetails.size - 1].sessionPremiere
+            binding.showReleaseDate.text = tvShowEntity.firstAirDate
 
-            binding.showRating.rating = tvShowEntity.rating.toFloat()/20
+            binding.showRating.rating = tvShowEntity.voteAverage!!.toFloat()/2
 
-            binding.showDuration.text = Utils.changeMinuteToDurationFormat(tvShowEntity.duration)
+            binding.showDuration.text = tvShowEntity.episodeRunTime?.get(0)?.let {
+                Utils.changeMinuteToDurationFormat(
+                    it
+                )
+            }
 
+            val posterURL = "https://image.tmdb.org/t/p/w500/${tvShowEntity.posterPath}"
             Glide.with(this)
-                .load(tvShowEntity.posterURL)
+                .load(posterURL)
                 .transform(RoundedCorners(20))
                 .apply(
                     RequestOptions.placeholderOf(R.drawable.ic_loading)
@@ -95,8 +107,10 @@ class DetailTvShowActivity : AppCompatActivity() {
                 )
                 .into(binding.showPoster)
 
+
+            val backdropURL = "https://www.themoviedb.org/t/p/w533_and_h300_bestv2/${tvShowEntity.posterPath}"
             Glide.with(this)
-                .load(tvShowEntity.backdropURL)
+                .load(backdropURL)
                 .transform(RoundedCorners(20))
                 .apply(
                     RequestOptions.placeholderOf(R.drawable.ic_loading)
@@ -105,7 +119,7 @@ class DetailTvShowActivity : AppCompatActivity() {
                 .into(binding.showBackdrop)
             binding.showBackdrop.alpha = 0.5F
 
-            for (genre in tvShowEntity.genre){
+            for (genre in tvShowEntity.genres!!){
                 //set the properties for button
                 val btnTag = Button(this)
 
@@ -117,7 +131,7 @@ class DetailTvShowActivity : AppCompatActivity() {
                 params.setMargins(0, 0, 20, 0)
 
                 btnTag.layoutParams = ActionBar.LayoutParams(params)
-                btnTag.text = genre
+                btnTag.text = genre.toString()
                 btnTag.background = this.getDrawable(R.drawable.rounded_button)
 
                 //set padding
@@ -128,7 +142,7 @@ class DetailTvShowActivity : AppCompatActivity() {
             }
 
             //set video in webview
-            setVideoWebView(tvShowEntity.trailerURL)
+            //setVideoWebView(tvShowEntity.trailerURL)
         }
     }
 

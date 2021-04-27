@@ -6,14 +6,15 @@ import android.os.Bundle
 import android.view.View
 import android.webkit.*
 import android.widget.Button
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.faltenreich.skeletonlayout.Skeleton
 import com.path_studio.moviecatalogue.R
 import com.path_studio.moviecatalogue.data.MovieEntity
+import com.path_studio.moviecatalogue.data.source.remote.response.DetailMovieResponse
 import com.path_studio.moviecatalogue.databinding.ActivityDetailMovieBinding
 import com.path_studio.moviecatalogue.util.Utils.changeMinuteToDurationFormat
 import com.path_studio.moviecatalogue.util.Utils.changeStringToDateFormat
@@ -21,6 +22,7 @@ import com.path_studio.moviecatalogue.util.Utils.showAlert
 
 
 class DetailMovieActivity : AppCompatActivity(){
+    private val detailMovieViewModel: DetailMovieViewModel by viewModels()
 
     private lateinit var binding: ActivityDetailMovieBinding
     private lateinit var skeleton: Skeleton
@@ -44,15 +46,18 @@ class DetailMovieActivity : AppCompatActivity(){
         showLoading(true)
         showYoutubeLoading(true)
 
-        val viewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory())[DetailMovieViewModel::class.java]
-
         val extras = intent.extras
         if (extras != null) {
             val movieId = extras.getLong(EXTRA_MOVIE)
             if (movieId != 0L) {
-                viewModel.setSelectedMovie(movieId)
-                movieDetails = viewModel.getMovies()
-                showDetailMovie(movieDetails)
+                detailMovieViewModel.setSelectedMovie(movieId)
+                val showDetails = detailMovieViewModel.detailMovie
+
+
+
+                showDetails.observe(this, { detail ->
+                    showDetailMovie(detail)
+                })
             }
         }
 
@@ -63,26 +68,27 @@ class DetailMovieActivity : AppCompatActivity(){
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putParcelable(EXTRA_STATE, movieDetails)
+        //outState.putParcelable(EXTRA_STATE, movieDetails)
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")
-    private fun showDetailMovie(movieEntity: MovieEntity) {
-        if (movieEntity.title.isNotEmpty()){
+    private fun showDetailMovie(movieEntity: DetailMovieResponse) {
+        if (!movieEntity.originalTitle.equals("") && movieEntity.originalTitle != null){
             showLoading(false)
 
             binding.movieTopTitle.text = movieEntity.title
             binding.movieTitle.text = movieEntity.title
-            binding.movieSinopsis.text = movieEntity.description
+            binding.movieSinopsis.text = movieEntity.overview
 
-            binding.movieReleaseDate.text = changeStringToDateFormat(movieEntity.releaseDate)
+            binding.movieReleaseDate.text = changeStringToDateFormat(movieEntity.releaseDate.toString())
 
-            binding.movieRating.rating = movieEntity.rating.toFloat()/20
+            binding.movieRating.rating = movieEntity.voteAverage!!.toFloat()/2
 
-            binding.movieDuration.text = changeMinuteToDurationFormat(movieEntity.duration)
+            binding.movieDuration.text = movieEntity.runtime?.let { changeMinuteToDurationFormat(it) }
 
+            val posterURL = "https://image.tmdb.org/t/p/w500/${movieEntity.posterPath}"
             Glide.with(this)
-                .load(movieEntity.posterURL)
+                .load(posterURL)
                 .transform(RoundedCorners(20))
                 .apply(
                     RequestOptions.placeholderOf(R.drawable.ic_loading)
@@ -90,8 +96,9 @@ class DetailMovieActivity : AppCompatActivity(){
                 )
                 .into(binding.moviePoster)
 
+            val backdropURL = "https://www.themoviedb.org/t/p/w533_and_h300_bestv2/${movieEntity.posterPath}"
             Glide.with(this)
-                .load(movieEntity.backdropURL)
+                .load(backdropURL)
                 .transform(RoundedCorners(20))
                 .apply(
                     RequestOptions.placeholderOf(R.drawable.ic_loading)
@@ -100,7 +107,7 @@ class DetailMovieActivity : AppCompatActivity(){
                 .into(binding.movieBackdrop)
             binding.movieBackdrop.alpha = 0.5F
 
-            for (genre in movieEntity.genre){
+            for (genre in movieEntity.genres!!){
                 //set the properties for button
                 val btnTag = Button(this)
 
@@ -112,7 +119,7 @@ class DetailMovieActivity : AppCompatActivity(){
                 params.setMargins(0, 0, 20, 0)
 
                 btnTag.layoutParams = ActionBar.LayoutParams(params)
-                btnTag.text = genre
+                btnTag.text = genre.toString()
                 btnTag.background = this.getDrawable(R.drawable.rounded_button)
 
                 //set padding
@@ -123,7 +130,7 @@ class DetailMovieActivity : AppCompatActivity(){
             }
 
             //set video in webview
-            setVideoWebView(movieEntity.youtubeVideoURL)
+            //setVideoWebView(movieEntity.youtubeVideoURL)
         }
     }
 

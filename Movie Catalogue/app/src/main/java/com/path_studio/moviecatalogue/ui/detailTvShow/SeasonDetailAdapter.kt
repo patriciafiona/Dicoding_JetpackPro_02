@@ -7,17 +7,18 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.path_studio.moviecatalogue.R
 import com.path_studio.moviecatalogue.data.TvShowSeasonEntity
+import com.path_studio.moviecatalogue.data.source.remote.response.SeasonsItem
 import com.path_studio.moviecatalogue.databinding.ItemsSeasonDetailBinding
 import com.path_studio.moviecatalogue.util.Utils.changeStringDateToYear
 
 class SeasonDetailAdapter: RecyclerView.Adapter<SeasonDetailAdapter.SeasonViewHolder>() {
 
-    private var listSeason = ArrayList<TvShowSeasonEntity>()
+    private var listSeason = ArrayList<SeasonsItem>()
 
-    fun setSeason(seasons: List<TvShowSeasonEntity>?) {
-        if (seasons == null) return
+    fun setSeason(season: List<SeasonsItem>) {
+        if (season == null) return
         this.listSeason.clear()
-        this.listSeason.addAll(seasons)
+        this.listSeason.addAll(season)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SeasonViewHolder {
@@ -34,21 +35,22 @@ class SeasonDetailAdapter: RecyclerView.Adapter<SeasonDetailAdapter.SeasonViewHo
 
 
     class SeasonViewHolder(private val binding: ItemsSeasonDetailBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(season: TvShowSeasonEntity) {
+        fun bind(season: SeasonsItem) {
             with(binding) {
-                val temp1 = "Season ${season.sessionId}"
+                val temp1 = "Season ${season.id}"
                 seasonNumber.text = temp1
 
-                val temp2 = "${changeStringDateToYear(season.sessionPremiere)}| ${season.totalEpisode} Eps."
+                val temp2 = "${season.airDate?.let { changeStringDateToYear(it) }}| ${season.episodeCount} Eps."
                 seasonYearAndTotalEpisode.text = temp2
 
-                val temp3 = "Season ${season.sessionId} premiered on ${season.sessionPremiere}."
+                val temp3 = "Season ${season.id} premiered on ${season.airDate}."
                 seasonPremierDetail.text = temp3
 
-                seasonOverview.text = season.sessionOverview
+                seasonOverview.text = season.overview
 
+                val posterURL = "https://image.tmdb.org/t/p/w500/${season.posterPath}"
                 Glide.with(itemView.context)
-                        .load(season.posterURL)
+                        .load(posterURL)
                         .apply(
                                 RequestOptions.placeholderOf(R.drawable.ic_loading)
                                         .error(R.drawable.ic_error))

@@ -8,14 +8,15 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.path_studio.moviecatalogue.R
 import com.path_studio.moviecatalogue.data.TvShowEntity
+import com.path_studio.moviecatalogue.data.source.remote.response.ResultsItemTvShow
 import com.path_studio.moviecatalogue.databinding.ItemsMovieTvshowBinding
 import com.path_studio.moviecatalogue.ui.detailTvShow.DetailTvShowActivity
 
 class TvShowAdapter: RecyclerView.Adapter<TvShowAdapter.TvShowViewHolder>() {
 
-    private var listTvShows = ArrayList<TvShowEntity>()
+    private var listTvShows = ArrayList<ResultsItemTvShow>()
 
-    fun setTvShow(shows: List<TvShowEntity>?) {
+    fun setTvShow(shows: List<ResultsItemTvShow>?) {
         if (shows == null) return
         this.listTvShows.clear()
         this.listTvShows.addAll(shows)
@@ -35,13 +36,13 @@ class TvShowAdapter: RecyclerView.Adapter<TvShowAdapter.TvShowViewHolder>() {
 
 
     class TvShowViewHolder(private val binding: ItemsMovieTvshowBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(show: TvShowEntity) {
+        fun bind(show: ResultsItemTvShow) {
             with(binding) {
-                tvItemTitle.text = show.title
+                tvItemTitle.text = show.originalName
 
-                tvItemDate.text = show.seasonDetails[show.seasonDetails.size -1].sessionPremiere
+                tvItemDate.text = show.firstAirDate
 
-                tvItemRating.rating = show.rating.toFloat()/20
+                tvItemRating.rating = show.voteAverage.toFloat()/2
 
                 itemView.setOnClickListener {
                     val intent = Intent(itemView.context, DetailTvShowActivity::class.java)
@@ -49,8 +50,9 @@ class TvShowAdapter: RecyclerView.Adapter<TvShowAdapter.TvShowViewHolder>() {
                     itemView.context.startActivity(intent)
                 }
 
+                val posterURL = "https://image.tmdb.org/t/p/w500/${show.posterPath}"
                 Glide.with(itemView.context)
-                        .load(show.posterURL)
+                        .load(posterURL)
                         .apply(
                                 RequestOptions.placeholderOf(R.drawable.ic_loading)
                                         .error(R.drawable.ic_error))

@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -18,6 +18,8 @@ class MovieFragment : BottomSheetDialogFragment(), OnBottomSheetCallbacks {
     private var _binding: FragmentMovieBinding? = null
     private val binding get() = _binding as FragmentMovieBinding
     private var currentState: Int = BottomSheetBehavior.STATE_HALF_EXPANDED
+
+    private val movieViewModel: MovieViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,11 +45,14 @@ class MovieFragment : BottomSheetDialogFragment(), OnBottomSheetCallbacks {
         (activity as MainActivity).closeBottomSheet()
 
         if (activity != null) {
-            val viewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory())[MovieViewModel::class.java]
-            val movies = viewModel.getMovies()
+            val movies = movieViewModel.listMovie
 
             val movieAdapter = MovieAdapter()
-            movieAdapter.setMovies(movies)
+
+            movies.observe(this, { movie ->
+                movieAdapter.setMovies(movie)
+                movieAdapter.notifyDataSetChanged()
+            })
 
             with(binding.rvMovie) {
                 layoutManager = LinearLayoutManager(context)

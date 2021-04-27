@@ -3,7 +3,6 @@ package com.path_studio.moviecatalogue.data
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
-@Parcelize
 data class TvShowEntity (
         var id: Long,
         var title: String,
@@ -15,4 +14,4 @@ data class TvShowEntity (
         var backdropURL: String,
         var posterURL: String,
         var trailerURL: String
-): Parcelable
+)

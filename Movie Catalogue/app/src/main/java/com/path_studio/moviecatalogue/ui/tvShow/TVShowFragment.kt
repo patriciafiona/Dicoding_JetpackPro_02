@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.appcompat.widget.AppCompatTextView
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -14,6 +15,8 @@ import com.path_studio.moviecatalogue.R
 import com.path_studio.moviecatalogue.databinding.FragmentTvShowBinding
 import com.path_studio.moviecatalogue.ui.bottomSheet.OnBottomSheetCallbacks
 import com.path_studio.moviecatalogue.ui.mainPage.MainActivity
+import com.path_studio.moviecatalogue.ui.movie.MovieAdapter
+import com.path_studio.moviecatalogue.ui.movie.MovieViewModel
 
 class TVShowFragment : BottomSheetDialogFragment(), OnBottomSheetCallbacks {
 
@@ -23,6 +26,8 @@ class TVShowFragment : BottomSheetDialogFragment(), OnBottomSheetCallbacks {
     private var currentState: Int = BottomSheetBehavior.STATE_HALF_EXPANDED
     private lateinit var textResult: AppCompatTextView
     private lateinit var filterImage: ImageView
+
+    private val tvShowViewModel: TvShowViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -55,11 +60,14 @@ class TVShowFragment : BottomSheetDialogFragment(), OnBottomSheetCallbacks {
         (activity as MainActivity).closeBottomSheet()
 
         if (activity != null) {
-            val viewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory())[TvShowViewModel::class.java]
-            val shows = viewModel.getTvShow()
+            val shows = tvShowViewModel.listTvShow
 
             val tvShowAdapter = TvShowAdapter()
-            tvShowAdapter.setTvShow(shows)
+
+            shows.observe(this, { show ->
+                tvShowAdapter.setTvShow(show)
+                tvShowAdapter.notifyDataSetChanged()
+            })
 
             with(binding.rvTvShow) {
                 layoutManager = LinearLayoutManager(context)

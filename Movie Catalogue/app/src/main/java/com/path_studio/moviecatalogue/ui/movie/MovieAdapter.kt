@@ -7,16 +7,16 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.path_studio.moviecatalogue.R
-import com.path_studio.moviecatalogue.data.MovieEntity
+import com.path_studio.moviecatalogue.data.source.remote.response.ResultsItemMovie
 import com.path_studio.moviecatalogue.databinding.ItemsMovieTvshowBinding
 import com.path_studio.moviecatalogue.ui.detailMovie.DetailMovieActivity
 import com.path_studio.moviecatalogue.util.Utils
 
 class MovieAdapter: RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
 
-    private var listMovies = ArrayList<MovieEntity>()
+    private var listMovies = ArrayList<ResultsItemMovie>()
 
-    fun setMovies(movies: List<MovieEntity>?) {
+    fun setMovies(movies: List<ResultsItemMovie>) {
         if (movies == null) return
         this.listMovies.clear()
         this.listMovies.addAll(movies)
@@ -28,20 +28,20 @@ class MovieAdapter: RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
-        val course = listMovies[position]
-        holder.bind(course)
+        val movie = listMovies[position]
+        holder.bind(movie)
     }
 
     override fun getItemCount(): Int = listMovies.size
 
 
     class MovieViewHolder(private val binding: ItemsMovieTvshowBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(movie: MovieEntity) {
+        fun bind(movie: ResultsItemMovie) {
             with(binding) {
-                tvItemTitle.text = movie.title
-                tvItemDate.text = Utils.changeStringToDateFormat(movie.releaseDate)
+                tvItemTitle.text = movie.originalTitle
+                tvItemDate.text = movie.releaseDate
 
-                tvItemRating.rating = movie.rating.toFloat()/20
+                tvItemRating.rating = movie.voteAverage.toFloat()/2
 
                 itemView.setOnClickListener {
                     val intent = Intent(itemView.context, DetailMovieActivity::class.java)
@@ -49,8 +49,9 @@ class MovieAdapter: RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
                     itemView.context.startActivity(intent)
                 }
 
+                val posterURL = "https://image.tmdb.org/t/p/w500/${movie.posterPath}"
                 Glide.with(itemView.context)
-                    .load(movie.posterURL)
+                    .load(posterURL)
                     .apply(
                         RequestOptions.placeholderOf(R.drawable.ic_loading)
                             .error(R.drawable.ic_error))
