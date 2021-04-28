@@ -18,6 +18,7 @@ import com.path_studio.moviecatalogue.R
 import com.path_studio.moviecatalogue.data.source.remote.response.DetailTvShowResponse
 import com.path_studio.moviecatalogue.databinding.ActivityDetailTvShowBinding
 import com.path_studio.moviecatalogue.util.Utils
+import com.path_studio.moviecatalogue.util.Utils.changeStringDateToYear
 
 class DetailTvShowActivity : AppCompatActivity() {
 
@@ -40,7 +41,6 @@ class DetailTvShowActivity : AppCompatActivity() {
 
         //show loading indicator
         showLoading(true)
-        showYoutubeLoading(true)
 
         //prepare view model for show Tv Show Details
 
@@ -83,11 +83,11 @@ class DetailTvShowActivity : AppCompatActivity() {
         if (!tvShowEntity.originalName.equals("") && tvShowEntity.originalName != null){
             showLoading(false)
 
-            binding.showTopTitle.text = tvShowEntity.originalName
-            binding.showTitle.text = tvShowEntity.originalName
+            binding.showTopTitle.text = tvShowEntity.name
+            binding.showTitle.text = tvShowEntity.name
             binding.showSinopsis.text = tvShowEntity.overview
 
-            binding.showReleaseDate.text = tvShowEntity.firstAirDate
+            binding.showReleaseDate.text = tvShowEntity.firstAirDate?.let { changeStringDateToYear(it) }.toString()
 
             binding.showRating.rating = tvShowEntity.voteAverage!!.toFloat()/2
 
@@ -97,7 +97,7 @@ class DetailTvShowActivity : AppCompatActivity() {
                 )
             }
 
-            val posterURL = "https://image.tmdb.org/t/p/w500/${tvShowEntity.posterPath}"
+            val posterURL = "https://image.tmdb.org/t/p/w500${tvShowEntity.posterPath}"
             Glide.with(this)
                 .load(posterURL)
                 .transform(RoundedCorners(20))
@@ -108,7 +108,7 @@ class DetailTvShowActivity : AppCompatActivity() {
                 .into(binding.showPoster)
 
 
-            val backdropURL = "https://www.themoviedb.org/t/p/w533_and_h300_bestv2/${tvShowEntity.posterPath}"
+            val backdropURL = "https://www.themoviedb.org/t/p/w533_and_h300_bestv2${tvShowEntity.backdropPath}"
             Glide.with(this)
                 .load(backdropURL)
                 .transform(RoundedCorners(20))
@@ -131,7 +131,7 @@ class DetailTvShowActivity : AppCompatActivity() {
                 params.setMargins(0, 0, 20, 0)
 
                 btnTag.layoutParams = ActionBar.LayoutParams(params)
-                btnTag.text = genre.toString()
+                btnTag.text = genre!!.name
                 btnTag.background = this.getDrawable(R.drawable.rounded_button)
 
                 //set padding
@@ -146,43 +146,11 @@ class DetailTvShowActivity : AppCompatActivity() {
         }
     }
 
-    @SuppressLint("SetJavaScriptEnabled")
-    private fun setVideoWebView(youtubeURL: String){
-        binding.showTrailer.webViewClient = object : WebViewClient() {
-            override fun onPageFinished(view: WebView, url: String) {
-                showYoutubeLoading(false)
-            }
-
-            override fun onReceivedError(
-                view: WebView?,
-                request: WebResourceRequest?,
-                error: WebResourceError?
-            ) {
-                Utils.showAlert(this@DetailTvShowActivity, "Failed to get Trailer Video")
-            }
-
-            override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
-                return false
-            }
-        }
-        val webSettings: WebSettings = binding.showTrailer.settings
-        webSettings.javaScriptEnabled = true
-        binding.showTrailer.loadUrl(youtubeURL)
-    }
-
     private fun showLoading(state: Boolean) {
         if (state) {
             skeleton.showSkeleton()
         } else {
             skeleton.showOriginal()
-        }
-    }
-
-    private fun showYoutubeLoading(state: Boolean) {
-        if (state) {
-            binding.youtubeProgressBar.visibility = View.VISIBLE
-        } else {
-            binding.youtubeProgressBar.visibility = View.GONE
         }
     }
 

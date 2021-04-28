@@ -1,7 +1,5 @@
 package com.path_studio.moviecatalogue.ui.tvShow
 
-import com.path_studio.moviecatalogue.data.TvShowEntity
-import com.path_studio.moviecatalogue.ui.movie.MovieViewModel
 import org.junit.Test
 
 import org.junit.Assert.*

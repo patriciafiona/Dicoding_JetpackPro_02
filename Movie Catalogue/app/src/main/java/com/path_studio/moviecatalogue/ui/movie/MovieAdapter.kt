@@ -11,6 +11,7 @@ import com.path_studio.moviecatalogue.data.source.remote.response.ResultsItemMov
 import com.path_studio.moviecatalogue.databinding.ItemsMovieTvshowBinding
 import com.path_studio.moviecatalogue.ui.detailMovie.DetailMovieActivity
 import com.path_studio.moviecatalogue.util.Utils
+import com.path_studio.moviecatalogue.util.Utils.changeStringToDateFormat
 
 class MovieAdapter: RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
 
@@ -38,8 +39,8 @@ class MovieAdapter: RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
     class MovieViewHolder(private val binding: ItemsMovieTvshowBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(movie: ResultsItemMovie) {
             with(binding) {
-                tvItemTitle.text = movie.originalTitle
-                tvItemDate.text = movie.releaseDate
+                tvItemTitle.text = movie.title
+                tvItemDate.text = changeStringToDateFormat(movie.releaseDate)
 
                 tvItemRating.rating = movie.voteAverage.toFloat()/2
 

@@ -6,10 +6,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.path_studio.moviecatalogue.R
-import com.path_studio.moviecatalogue.data.TvShowSeasonEntity
 import com.path_studio.moviecatalogue.data.source.remote.response.SeasonsItem
 import com.path_studio.moviecatalogue.databinding.ItemsSeasonDetailBinding
-import com.path_studio.moviecatalogue.util.Utils.changeStringDateToYear
+import com.path_studio.moviecatalogue.util.Utils.changeStringToDateFormat
 
 class SeasonDetailAdapter: RecyclerView.Adapter<SeasonDetailAdapter.SeasonViewHolder>() {
 
@@ -28,19 +27,19 @@ class SeasonDetailAdapter: RecyclerView.Adapter<SeasonDetailAdapter.SeasonViewHo
 
     override fun onBindViewHolder(holder: SeasonViewHolder, position: Int) {
         val season = listSeason[position]
-        holder.bind(season)
+        holder.bind(season, position)
     }
 
     override fun getItemCount(): Int = listSeason.size
 
 
     class SeasonViewHolder(private val binding: ItemsSeasonDetailBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(season: SeasonsItem) {
+        fun bind(season: SeasonsItem, position: Int) {
             with(binding) {
-                val temp1 = "Season ${season.id}"
+                val temp1 = "Season ${position + 1}"
                 seasonNumber.text = temp1
 
-                val temp2 = "${season.airDate?.let { changeStringDateToYear(it) }}| ${season.episodeCount} Eps."
+                val temp2 = "${season.airDate?.let { changeStringToDateFormat(it) }}| ${season.episodeCount} Eps."
                 seasonYearAndTotalEpisode.text = temp2
 
                 val temp3 = "Season ${season.id} premiered on ${season.airDate}."

@@ -1,6 +1,5 @@
 package com.path_studio.moviecatalogue.ui.detailMovie
 
-import com.path_studio.moviecatalogue.util.DataDummy
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Before

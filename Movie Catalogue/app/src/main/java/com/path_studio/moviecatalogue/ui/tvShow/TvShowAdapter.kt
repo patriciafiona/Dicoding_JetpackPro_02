@@ -7,10 +7,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.path_studio.moviecatalogue.R
-import com.path_studio.moviecatalogue.data.TvShowEntity
 import com.path_studio.moviecatalogue.data.source.remote.response.ResultsItemTvShow
 import com.path_studio.moviecatalogue.databinding.ItemsMovieTvshowBinding
 import com.path_studio.moviecatalogue.ui.detailTvShow.DetailTvShowActivity
+import com.path_studio.moviecatalogue.util.Utils.changeStringToDateFormat
 
 class TvShowAdapter: RecyclerView.Adapter<TvShowAdapter.TvShowViewHolder>() {
 
@@ -38,9 +38,9 @@ class TvShowAdapter: RecyclerView.Adapter<TvShowAdapter.TvShowViewHolder>() {
     class TvShowViewHolder(private val binding: ItemsMovieTvshowBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(show: ResultsItemTvShow) {
             with(binding) {
-                tvItemTitle.text = show.originalName
+                tvItemTitle.text = show.name
 
-                tvItemDate.text = show.firstAirDate
+                tvItemDate.text = changeStringToDateFormat(show.firstAirDate)
 
                 tvItemRating.rating = show.voteAverage.toFloat()/2
 

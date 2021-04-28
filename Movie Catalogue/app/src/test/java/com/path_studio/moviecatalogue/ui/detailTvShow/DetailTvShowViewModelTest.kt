@@ -1,7 +1,5 @@
 package com.path_studio.moviecatalogue.ui.detailTvShow
 
-import com.path_studio.moviecatalogue.ui.detailMovie.DetailMovieViewModel
-import com.path_studio.moviecatalogue.util.DataDummy
 import org.junit.Test
 
 import org.junit.Assert.*

@@ -4,13 +4,9 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.path_studio.moviecatalogue.BuildConfig
-import com.path_studio.moviecatalogue.data.MovieEntity
 import com.path_studio.moviecatalogue.data.source.remote.response.DetailMovieResponse
-import com.path_studio.moviecatalogue.data.source.remote.response.DiscoverMovieResponse
 import com.path_studio.moviecatalogue.ui.movie.MovieViewModel
 import com.path_studio.moviecatalogue.util.ApiConfig
-import com.path_studio.moviecatalogue.util.DataDummy
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

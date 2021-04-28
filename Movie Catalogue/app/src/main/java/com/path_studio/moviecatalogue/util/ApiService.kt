@@ -22,14 +22,14 @@ interface ApiService {
         @Query("language") language: String
     ): Call<DiscoverTvShowResponse>
 
-    @GET("discover/movie/{movieId}")
+    @GET("movie/{movieId}")
     fun getDetailMovie(
         @Path("movieId") movieId: String,
         @Query("api_key") api_key: String?,
         @Query("language") language: String
     ): Call<DetailMovieResponse>
 
-    @GET("discover/tv/{tvShowId}")
+    @GET("tv/{tvShowId}")
     fun getDetailTvShow(
         @Path("tvShowId") tvShowId: String,
         @Query("api_key") api_key: String?,

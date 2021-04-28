@@ -16,7 +16,7 @@ object Utils {
             val strDate: String = value
 
             //current date format
-            val dateFormat: SimpleDateFormat = SimpleDateFormat("MM/dd/yyyy")
+            val dateFormat: SimpleDateFormat = SimpleDateFormat("yyyy-MM-dd")
             val objDate: Date = dateFormat.parse(strDate)
 
             //Expected date format
@@ -26,19 +26,6 @@ object Utils {
             e.printStackTrace()
         }
         return ""
-    }
-
-    fun showAlert(context: Context, message: String){
-        val builder1: AlertDialog.Builder = AlertDialog.Builder(context)
-        builder1.setMessage(message)
-        builder1.setCancelable(true)
-
-        builder1.setPositiveButton(
-                "Oke"
-        ) { dialog, _ -> dialog.cancel() }
-
-        val alert11: AlertDialog = builder1.create()
-        alert11.show()
     }
 
     fun changeMinuteToDurationFormat(duration: Int): String{
@@ -55,7 +42,7 @@ object Utils {
 
     @SuppressLint("NewApi")
     fun changeStringDateToYear(date: String): Int{
-        val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("MMMM dd, yyyy")
+        val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
         val localDate: LocalDate = LocalDate.parse(date, formatter)
 
         return localDate.year
