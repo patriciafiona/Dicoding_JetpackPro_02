@@ -1,6 +1,7 @@
 package com.path_studio.moviecatalogue.ui.movie
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,6 +10,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.path_studio.moviecatalogue.R
+import com.path_studio.moviecatalogue.data.source.TmdbRepository
+import com.path_studio.moviecatalogue.data.source.remote.RemoteDataSource
 import com.path_studio.moviecatalogue.databinding.FragmentMovieBinding
 import com.path_studio.moviecatalogue.ui.bottomSheet.OnBottomSheetCallbacks
 import com.path_studio.moviecatalogue.ui.mainPage.MainActivity
@@ -19,7 +22,7 @@ class MovieFragment : BottomSheetDialogFragment(), OnBottomSheetCallbacks {
     private val binding get() = _binding as FragmentMovieBinding
     private var currentState: Int = BottomSheetBehavior.STATE_HALF_EXPANDED
 
-    private val movieViewModel: MovieViewModel by viewModels()
+    private lateinit var movieViewModel: MovieViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -45,11 +48,14 @@ class MovieFragment : BottomSheetDialogFragment(), OnBottomSheetCallbacks {
         (activity as MainActivity).closeBottomSheet()
 
         if (activity != null) {
-            val movies = movieViewModel.listMovie
+            movieViewModel = MovieViewModel(TmdbRepository.getInstance(RemoteDataSource.getInstance()))
+
+            val movies = movieViewModel.getDiscoverMovies()
 
             val movieAdapter = MovieAdapter()
 
             movies.observe(this, { movie ->
+                Log.e("Movie", movie.toString())
                 movieAdapter.setMovies(movie)
                 movieAdapter.notifyDataSetChanged()
             })

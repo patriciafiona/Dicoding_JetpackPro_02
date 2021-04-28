@@ -1,4 +1,4 @@
-package com.path_studio.moviecatalogue.util
+package com.path_studio.moviecatalogue.data.source.remote.api
 
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor

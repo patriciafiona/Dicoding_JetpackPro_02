@@ -1,4 +1,4 @@
-package com.path_studio.moviecatalogue.util
+package com.path_studio.moviecatalogue.data.source.remote.api
 
 import com.path_studio.moviecatalogue.data.source.remote.response.DetailMovieResponse
 import com.path_studio.moviecatalogue.data.source.remote.response.DetailTvShowResponse

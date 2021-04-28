@@ -7,17 +7,17 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.path_studio.moviecatalogue.R
+import com.path_studio.moviecatalogue.data.MovieEntity
 import com.path_studio.moviecatalogue.data.source.remote.response.ResultsItemMovie
 import com.path_studio.moviecatalogue.databinding.ItemsMovieTvshowBinding
 import com.path_studio.moviecatalogue.ui.detailMovie.DetailMovieActivity
-import com.path_studio.moviecatalogue.util.Utils
 import com.path_studio.moviecatalogue.util.Utils.changeStringToDateFormat
 
 class MovieAdapter: RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
 
-    private var listMovies = ArrayList<ResultsItemMovie>()
+    private var listMovies = ArrayList<MovieEntity>()
 
-    fun setMovies(movies: List<ResultsItemMovie>) {
+    fun setMovies(movies: List<MovieEntity>) {
         if (movies == null) return
         this.listMovies.clear()
         this.listMovies.addAll(movies)
@@ -37,12 +37,12 @@ class MovieAdapter: RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
 
 
     class MovieViewHolder(private val binding: ItemsMovieTvshowBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(movie: ResultsItemMovie) {
+        fun bind(movie: MovieEntity) {
             with(binding) {
                 tvItemTitle.text = movie.title
-                tvItemDate.text = changeStringToDateFormat(movie.releaseDate)
+                tvItemDate.text = changeStringToDateFormat(movie.releaseDate!!)
 
-                tvItemRating.rating = movie.voteAverage.toFloat()/2
+                tvItemRating.rating = movie.voteAverage!!.toFloat()/2
 
                 itemView.setOnClickListener {
                     val intent = Intent(itemView.context, DetailMovieActivity::class.java)

@@ -3,24 +3,23 @@ package com.path_studio.moviecatalogue.ui.detailMovie
 import android.annotation.SuppressLint
 import android.app.ActionBar
 import android.os.Bundle
-import android.view.View
-import android.webkit.*
 import android.widget.Button
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.faltenreich.skeletonlayout.Skeleton
 import com.path_studio.moviecatalogue.R
-import com.path_studio.moviecatalogue.data.source.remote.response.DetailMovieResponse
+import com.path_studio.moviecatalogue.data.DetailMovieEntity
+import com.path_studio.moviecatalogue.data.source.TmdbRepository
+import com.path_studio.moviecatalogue.data.source.remote.RemoteDataSource
 import com.path_studio.moviecatalogue.databinding.ActivityDetailMovieBinding
 import com.path_studio.moviecatalogue.util.Utils.changeMinuteToDurationFormat
 import com.path_studio.moviecatalogue.util.Utils.changeStringToDateFormat
 
 
 class DetailMovieActivity : AppCompatActivity(){
-    private val detailMovieViewModel: DetailMovieViewModel by viewModels()
+    private lateinit var detailMovieViewModel: DetailMovieViewModel
 
     private lateinit var binding: ActivityDetailMovieBinding
     private lateinit var skeleton: Skeleton
@@ -44,10 +43,10 @@ class DetailMovieActivity : AppCompatActivity(){
         if (extras != null) {
             val movieId = extras.getLong(EXTRA_MOVIE)
             if (movieId != 0L) {
-                detailMovieViewModel.setSelectedMovie(movieId)
-                val showDetails = detailMovieViewModel.detailMovie
-
-
+                detailMovieViewModel = DetailMovieViewModel(TmdbRepository.getInstance(
+                    RemoteDataSource.getInstance()))
+                detailMovieViewModel.getDetailMovie(movieId.toString())
+                val showDetails = detailMovieViewModel.getDetailMovie(movieId.toString())
 
                 showDetails.observe(this, { detail ->
                     showDetailMovie(detail)
@@ -61,8 +60,8 @@ class DetailMovieActivity : AppCompatActivity(){
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")
-    private fun showDetailMovie(movieEntity: DetailMovieResponse) {
-        if (!movieEntity.originalTitle.equals("") && movieEntity.originalTitle != null){
+    private fun showDetailMovie(movieEntity: DetailMovieEntity) {
+        if (!movieEntity.title.equals("") && movieEntity.title != null){
             showLoading(false)
 
             binding.movieTopTitle.text = movieEntity.title
@@ -73,7 +72,7 @@ class DetailMovieActivity : AppCompatActivity(){
 
             binding.movieRating.rating = movieEntity.voteAverage!!.toFloat()/2
 
-            binding.movieDuration.text = movieEntity.runtime?.let { changeMinuteToDurationFormat(it) }
+            binding.movieDuration.text = changeMinuteToDurationFormat(movieEntity.runtime!!)
 
             val posterURL = "https://image.tmdb.org/t/p/w500${movieEntity.posterPath}"
             Glide.with(this)
@@ -108,7 +107,7 @@ class DetailMovieActivity : AppCompatActivity(){
                 params.setMargins(0, 0, 20, 0)
 
                 btnTag.layoutParams = ActionBar.LayoutParams(params)
-                btnTag.text = genre!!.name
+                btnTag.text = genre
                 btnTag.background = this.getDrawable(R.drawable.rounded_button)
 
                 //set padding

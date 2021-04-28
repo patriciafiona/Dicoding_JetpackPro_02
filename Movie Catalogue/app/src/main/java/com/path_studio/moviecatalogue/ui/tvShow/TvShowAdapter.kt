@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.path_studio.moviecatalogue.R
+import com.path_studio.moviecatalogue.data.TvShowEntity
 import com.path_studio.moviecatalogue.data.source.remote.response.ResultsItemTvShow
 import com.path_studio.moviecatalogue.databinding.ItemsMovieTvshowBinding
 import com.path_studio.moviecatalogue.ui.detailTvShow.DetailTvShowActivity
@@ -14,9 +15,9 @@ import com.path_studio.moviecatalogue.util.Utils.changeStringToDateFormat
 
 class TvShowAdapter: RecyclerView.Adapter<TvShowAdapter.TvShowViewHolder>() {
 
-    private var listTvShows = ArrayList<ResultsItemTvShow>()
+    private var listTvShows = ArrayList<TvShowEntity>()
 
-    fun setTvShow(shows: List<ResultsItemTvShow>?) {
+    fun setTvShow(shows: List<TvShowEntity>) {
         if (shows == null) return
         this.listTvShows.clear()
         this.listTvShows.addAll(shows)
@@ -36,13 +37,13 @@ class TvShowAdapter: RecyclerView.Adapter<TvShowAdapter.TvShowViewHolder>() {
 
 
     class TvShowViewHolder(private val binding: ItemsMovieTvshowBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(show: ResultsItemTvShow) {
+        fun bind(show: TvShowEntity) {
             with(binding) {
                 tvItemTitle.text = show.name
 
-                tvItemDate.text = changeStringToDateFormat(show.firstAirDate)
+                tvItemDate.text = changeStringToDateFormat(show.firstAirDate!!)
 
-                tvItemRating.rating = show.voteAverage.toFloat()/2
+                tvItemRating.rating = show.voteAverage!!.toFloat()/2
 
                 itemView.setOnClickListener {
                     val intent = Intent(itemView.context, DetailTvShowActivity::class.java)

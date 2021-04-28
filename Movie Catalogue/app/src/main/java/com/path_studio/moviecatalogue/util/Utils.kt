@@ -1,8 +1,6 @@
 package com.path_studio.moviecatalogue.util
 
 import android.annotation.SuppressLint
-import android.app.AlertDialog
-import android.content.Context
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter

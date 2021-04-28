@@ -5,10 +5,8 @@ import com.path_studio.moviecatalogue.data.source.TmdbRepository
 import com.path_studio.moviecatalogue.data.source.remote.RemoteDataSource
 
 object Injection {
-    /*fun provideRepository(context: Context): TmdbRepository {
-
-        val remoteDataSource = RemoteDataSource.getInstance(JsonHelper(context))
-
+    fun provideImdbRepository(context: Context): TmdbRepository {
+        val remoteDataSource = RemoteDataSource.getInstance()
         return TmdbRepository.getInstance(remoteDataSource)
-    }*/
+    }
 }

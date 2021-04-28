@@ -7,15 +7,15 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.path_studio.moviecatalogue.R
+import com.path_studio.moviecatalogue.data.source.TmdbRepository
+import com.path_studio.moviecatalogue.data.source.remote.RemoteDataSource
 import com.path_studio.moviecatalogue.databinding.FragmentTvShowBinding
 import com.path_studio.moviecatalogue.ui.bottomSheet.OnBottomSheetCallbacks
 import com.path_studio.moviecatalogue.ui.mainPage.MainActivity
-import com.path_studio.moviecatalogue.ui.movie.MovieAdapter
 import com.path_studio.moviecatalogue.ui.movie.MovieViewModel
 
 class TVShowFragment : BottomSheetDialogFragment(), OnBottomSheetCallbacks {
@@ -27,7 +27,7 @@ class TVShowFragment : BottomSheetDialogFragment(), OnBottomSheetCallbacks {
     private lateinit var textResult: AppCompatTextView
     private lateinit var filterImage: ImageView
 
-    private val tvShowViewModel: TvShowViewModel by viewModels()
+    private lateinit var tvShowViewModel: TvShowViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -60,7 +60,8 @@ class TVShowFragment : BottomSheetDialogFragment(), OnBottomSheetCallbacks {
         (activity as MainActivity).closeBottomSheet()
 
         if (activity != null) {
-            val shows = tvShowViewModel.listTvShow
+            tvShowViewModel = TvShowViewModel(TmdbRepository.getInstance(RemoteDataSource.getInstance()))
+            val shows = tvShowViewModel.getDiscoverTvShow()
 
             val tvShowAdapter = TvShowAdapter()
 
