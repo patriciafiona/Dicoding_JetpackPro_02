@@ -1,9 +1,8 @@
 package com.path_studio.moviecatalogue.ui.tvShow
 
-import org.junit.Test
-
 import org.junit.Assert.*
 import org.junit.Before
+import org.junit.Test
 
 class TvShowViewModelTest {
 

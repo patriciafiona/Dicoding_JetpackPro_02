@@ -6,17 +6,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.appcompat.widget.AppCompatTextView
-import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.path_studio.moviecatalogue.R
-import com.path_studio.moviecatalogue.data.source.TmdbRepository
-import com.path_studio.moviecatalogue.data.source.remote.RemoteDataSource
 import com.path_studio.moviecatalogue.databinding.FragmentTvShowBinding
+import com.path_studio.moviecatalogue.di.Injection.provideImdbRepository
 import com.path_studio.moviecatalogue.ui.bottomSheet.OnBottomSheetCallbacks
 import com.path_studio.moviecatalogue.ui.mainPage.MainActivity
-import com.path_studio.moviecatalogue.ui.movie.MovieViewModel
 
 class TVShowFragment : BottomSheetDialogFragment(), OnBottomSheetCallbacks {
 
@@ -37,15 +34,9 @@ class TVShowFragment : BottomSheetDialogFragment(), OnBottomSheetCallbacks {
         _binding = FragmentTvShowBinding.inflate(inflater, container, false)
         val view = binding.root
 
-        //set loading
-        showLoading(true)
-
         //init
         textResult = view.findViewById(R.id.textResult2)
         filterImage = view.findViewById(R.id.indicatorImage2)
-
-        //set loading
-        showLoading(true)
 
         //set bottomSheet Callbacks
         (activity as MainActivity).setOnBottomSheetCallbacks(this)
@@ -60,7 +51,7 @@ class TVShowFragment : BottomSheetDialogFragment(), OnBottomSheetCallbacks {
         (activity as MainActivity).closeBottomSheet()
 
         if (activity != null) {
-            tvShowViewModel = TvShowViewModel(TmdbRepository.getInstance(RemoteDataSource.getInstance()))
+            tvShowViewModel = TvShowViewModel(provideImdbRepository(activity as MainActivity))
             val shows = tvShowViewModel.getDiscoverTvShow()
 
             val tvShowAdapter = TvShowAdapter()
@@ -70,11 +61,14 @@ class TVShowFragment : BottomSheetDialogFragment(), OnBottomSheetCallbacks {
                 tvShowAdapter.notifyDataSetChanged()
             })
 
+            tvShowViewModel.getLoading().observe(this, {
+                binding.progressBar.visibility = if (it) View.VISIBLE else View.GONE
+            })
+
             with(binding.rvTvShow) {
                 layoutManager = LinearLayoutManager(context)
                 setHasFixedSize(true)
                 adapter = tvShowAdapter
-                showLoading(false)
             }
         }
 
@@ -102,14 +96,6 @@ class TVShowFragment : BottomSheetDialogFragment(), OnBottomSheetCallbacks {
                 textResult.text = this.getString(R.string.list_of_tv_shows)
                 filterImage.setImageResource(R.drawable.ic_baseline_expand_less_purple)
             }
-        }
-    }
-
-    private fun showLoading(state: Boolean) {
-        if (state) {
-            binding.progressBar.visibility = View.VISIBLE
-        } else {
-            binding.progressBar.visibility = View.GONE
         }
     }
 

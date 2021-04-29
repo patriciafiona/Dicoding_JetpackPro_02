@@ -13,10 +13,8 @@ import com.bumptech.glide.request.RequestOptions
 import com.faltenreich.skeletonlayout.Skeleton
 import com.path_studio.moviecatalogue.R
 import com.path_studio.moviecatalogue.data.DetailTvShowEntity
-import com.path_studio.moviecatalogue.data.TvShowSeasonEntity
-import com.path_studio.moviecatalogue.data.source.TmdbRepository
-import com.path_studio.moviecatalogue.data.source.remote.RemoteDataSource
 import com.path_studio.moviecatalogue.databinding.ActivityDetailTvShowBinding
+import com.path_studio.moviecatalogue.di.Injection
 import com.path_studio.moviecatalogue.util.Utils
 import com.path_studio.moviecatalogue.util.Utils.changeStringDateToYear
 
@@ -39,9 +37,6 @@ class DetailTvShowActivity : AppCompatActivity() {
         //init Skeleton
         skeleton = binding.skeletonLayout
 
-        //show loading indicator
-        showLoading(true)
-
         //prepare view model for show Tv Show Details
 
         val extras = intent.extras
@@ -49,7 +44,7 @@ class DetailTvShowActivity : AppCompatActivity() {
             val showId = extras.getLong(EXTRA_TV_SHOW)
             Log.e("showId", showId.toString())
             if (showId != 0L) {
-                detailTvShowViewModel = DetailTvShowViewModel(TmdbRepository.getInstance(RemoteDataSource.getInstance()))
+                detailTvShowViewModel = DetailTvShowViewModel(Injection.provideImdbRepository(this))
                 val showDetails = detailTvShowViewModel.getDetailTvShow(showId.toString())
 
                 val seasonAdapter = SeasonDetailAdapter()
@@ -58,7 +53,6 @@ class DetailTvShowActivity : AppCompatActivity() {
                     layoutManager = LinearLayoutManager(context)
                     setHasFixedSize(true)
                     adapter = seasonAdapter
-                    showLoading(false)
                 }
 
                 showDetails.observe(this, { detail ->
@@ -66,6 +60,10 @@ class DetailTvShowActivity : AppCompatActivity() {
                     seasonAdapter.setSeason(listOfSeason!!)
 
                     showDetailShow(detail)
+                })
+
+                detailTvShowViewModel.getLoading().observe(this, {
+                    if (it) skeleton.showSkeleton() else skeleton.showOriginal()
                 })
             }
         }
@@ -78,7 +76,6 @@ class DetailTvShowActivity : AppCompatActivity() {
     @SuppressLint("UseCompatLoadingForDrawables")
     private fun showDetailShow(tvShowEntity: DetailTvShowEntity) {
         if (!tvShowEntity.name.equals("") && tvShowEntity.name != null){
-            showLoading(false)
 
             binding.showTopTitle.text = tvShowEntity.name
             binding.showTitle.text = tvShowEntity.name
@@ -138,14 +135,6 @@ class DetailTvShowActivity : AppCompatActivity() {
                 binding.showGenres.addView(btnTag)
             }
 
-    }
-
-    private fun showLoading(state: Boolean) {
-        if (state) {
-            skeleton.showSkeleton()
-        } else {
-            skeleton.showOriginal()
-        }
     }
 
 }

@@ -2,7 +2,10 @@ package com.path_studio.moviecatalogue.data.source.remote
 
 import com.path_studio.moviecatalogue.BuildConfig
 import com.path_studio.moviecatalogue.data.source.remote.api.ApiConfig
-import com.path_studio.moviecatalogue.data.source.remote.response.*
+import com.path_studio.moviecatalogue.data.source.remote.response.DetailMovieResponse
+import com.path_studio.moviecatalogue.data.source.remote.response.DetailTvShowResponse
+import com.path_studio.moviecatalogue.data.source.remote.response.ResultsItemMovie
+import com.path_studio.moviecatalogue.data.source.remote.response.ResultsItemTvShow
 import com.path_studio.moviecatalogue.util.EspressoIdlingResource
 import retrofit2.await
 

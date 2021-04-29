@@ -13,6 +13,10 @@ import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
 
 class TmdbRepository private constructor(private val remoteDataSource: RemoteDataSource): TmdbDataSource {
+
+    private val _isLoading = MutableLiveData<Boolean>()
+    val isLoading: LiveData<Boolean> = _isLoading
+
     companion object{
         @Volatile
         private var instance: TmdbRepository? = null
@@ -24,6 +28,7 @@ class TmdbRepository private constructor(private val remoteDataSource: RemoteDat
     }
 
     override fun getDiscoverMovies(): LiveData<List<MovieEntity>> {
+        _isLoading.value = true
         val listOfMovie = MutableLiveData<List<MovieEntity>>()
         CoroutineScope(IO).launch{
             remoteDataSource.getDiscoverMovie(object : RemoteDataSource.CallbackLoadDiscoverMovie{
@@ -42,6 +47,7 @@ class TmdbRepository private constructor(private val remoteDataSource: RemoteDat
                         )
                         movies.add(movie)
                     }
+                    _isLoading.postValue(false)
                     listOfMovie.postValue(movies)
                 }
             })
@@ -50,6 +56,7 @@ class TmdbRepository private constructor(private val remoteDataSource: RemoteDat
     }
 
     override fun getDiscoverTvShow(): LiveData<List<TvShowEntity>> {
+        _isLoading.value = true
         val listOfShow = MutableLiveData<List<TvShowEntity>>()
         CoroutineScope(IO).launch{
             remoteDataSource.getDiscoverTvShow(object : RemoteDataSource.CallbackLoadDiscoverTvShow{
@@ -68,6 +75,7 @@ class TmdbRepository private constructor(private val remoteDataSource: RemoteDat
                         )
                         shows.add(show)
                     }
+                    _isLoading.postValue(false)
                     listOfShow.postValue(shows)
                 }
             })
@@ -76,6 +84,7 @@ class TmdbRepository private constructor(private val remoteDataSource: RemoteDat
     }
 
     override fun getDetailMovie(movieId: String): LiveData<DetailMovieEntity> {
+        _isLoading.value = true
         val movieResult = MutableLiveData<DetailMovieEntity>()
         CoroutineScope(IO).launch{
             remoteDataSource.getMovie(movieId, object : RemoteDataSource.CallbackLoadDetailMovie{
@@ -99,6 +108,7 @@ class TmdbRepository private constructor(private val remoteDataSource: RemoteDat
                         showResponse.releaseDate,
                         showResponse.voteAverage
                     )
+                    _isLoading.postValue(false)
                     movieResult.postValue(movie)
                 }
             })
@@ -107,6 +117,7 @@ class TmdbRepository private constructor(private val remoteDataSource: RemoteDat
     }
 
     override fun getDetailTvShow(showId: String): MutableLiveData<DetailTvShowEntity> {
+        _isLoading.value = true
         val showResult = MutableLiveData<DetailTvShowEntity>()
         CoroutineScope(IO).launch{
             remoteDataSource.getTvShow(showId, object : RemoteDataSource.CallbackLoadDetailTvShow{
@@ -145,6 +156,7 @@ class TmdbRepository private constructor(private val remoteDataSource: RemoteDat
                         showResponse.firstAirDate,
                         showResponse.voteAverage
                     )
+                    _isLoading.postValue(false)
                     showResult.postValue(show)
                 }
             })

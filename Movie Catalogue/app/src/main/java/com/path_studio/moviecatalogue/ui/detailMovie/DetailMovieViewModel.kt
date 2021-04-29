@@ -7,4 +7,5 @@ import com.path_studio.moviecatalogue.data.source.TmdbRepository
 
 class DetailMovieViewModel(private val tmdbRepository: TmdbRepository): ViewModel() {
     fun getDetailMovie(movieId: String): LiveData<DetailMovieEntity> = tmdbRepository.getDetailMovie(movieId)
+    fun getLoading():LiveData<Boolean> = tmdbRepository.isLoading
 }

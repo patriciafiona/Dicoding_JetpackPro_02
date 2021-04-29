@@ -11,9 +11,8 @@ import com.bumptech.glide.request.RequestOptions
 import com.faltenreich.skeletonlayout.Skeleton
 import com.path_studio.moviecatalogue.R
 import com.path_studio.moviecatalogue.data.DetailMovieEntity
-import com.path_studio.moviecatalogue.data.source.TmdbRepository
-import com.path_studio.moviecatalogue.data.source.remote.RemoteDataSource
 import com.path_studio.moviecatalogue.databinding.ActivityDetailMovieBinding
+import com.path_studio.moviecatalogue.di.Injection
 import com.path_studio.moviecatalogue.util.Utils.changeMinuteToDurationFormat
 import com.path_studio.moviecatalogue.util.Utils.changeStringToDateFormat
 
@@ -36,20 +35,20 @@ class DetailMovieActivity : AppCompatActivity(){
         //init Skeleton
         skeleton = binding.skeletonLayout
 
-        //show loading indicator
-        showLoading(true)
-
         val extras = intent.extras
         if (extras != null) {
             val movieId = extras.getLong(EXTRA_MOVIE)
             if (movieId != 0L) {
-                detailMovieViewModel = DetailMovieViewModel(TmdbRepository.getInstance(
-                    RemoteDataSource.getInstance()))
+                detailMovieViewModel = DetailMovieViewModel(Injection.provideImdbRepository(this))
                 detailMovieViewModel.getDetailMovie(movieId.toString())
                 val showDetails = detailMovieViewModel.getDetailMovie(movieId.toString())
 
                 showDetails.observe(this, { detail ->
                     showDetailMovie(detail)
+                })
+
+                detailMovieViewModel.getLoading().observe(this, {
+                    if (it) skeleton.showSkeleton() else skeleton.showOriginal()
                 })
             }
         }
@@ -62,8 +61,6 @@ class DetailMovieActivity : AppCompatActivity(){
     @SuppressLint("UseCompatLoadingForDrawables")
     private fun showDetailMovie(movieEntity: DetailMovieEntity) {
         if (!movieEntity.title.equals("") && movieEntity.title != null){
-            showLoading(false)
-
             binding.movieTopTitle.text = movieEntity.title
             binding.movieTitle.text = movieEntity.title
             binding.movieSinopsis.text = movieEntity.overview
@@ -116,14 +113,6 @@ class DetailMovieActivity : AppCompatActivity(){
                 //add button to the layout
                 binding.movieGenres.addView(btnTag)
             }
-        }
-    }
-
-    private fun showLoading(state: Boolean) {
-        if (state) {
-            skeleton.showSkeleton()
-        } else {
-            skeleton.showOriginal()
         }
     }
 

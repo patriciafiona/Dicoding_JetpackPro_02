@@ -5,14 +5,12 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.path_studio.moviecatalogue.R
-import com.path_studio.moviecatalogue.data.source.TmdbRepository
-import com.path_studio.moviecatalogue.data.source.remote.RemoteDataSource
 import com.path_studio.moviecatalogue.databinding.FragmentMovieBinding
+import com.path_studio.moviecatalogue.di.Injection
 import com.path_studio.moviecatalogue.ui.bottomSheet.OnBottomSheetCallbacks
 import com.path_studio.moviecatalogue.ui.mainPage.MainActivity
 
@@ -33,9 +31,6 @@ class MovieFragment : BottomSheetDialogFragment(), OnBottomSheetCallbacks {
         _binding = FragmentMovieBinding.inflate(inflater, container, false)
         val view = binding.root
 
-        //set loading
-        showLoading(true)
-
         //set bottomSheet Callbacks
         (activity as MainActivity).setOnBottomSheetCallbacks(this)
         return view
@@ -48,7 +43,7 @@ class MovieFragment : BottomSheetDialogFragment(), OnBottomSheetCallbacks {
         (activity as MainActivity).closeBottomSheet()
 
         if (activity != null) {
-            movieViewModel = MovieViewModel(TmdbRepository.getInstance(RemoteDataSource.getInstance()))
+            movieViewModel = MovieViewModel(Injection.provideImdbRepository(activity as MainActivity))
 
             val movies = movieViewModel.getDiscoverMovies()
 
@@ -60,11 +55,14 @@ class MovieFragment : BottomSheetDialogFragment(), OnBottomSheetCallbacks {
                 movieAdapter.notifyDataSetChanged()
             })
 
+            movieViewModel.getLoading().observe(this, {
+                binding.progressBar.visibility = if (it) View.VISIBLE else View.GONE
+            })
+
             with(binding.rvMovie) {
                 layoutManager = LinearLayoutManager(context)
                 setHasFixedSize(true)
                 adapter = movieAdapter
-                showLoading(false)
             }
         }
 
@@ -92,14 +90,6 @@ class MovieFragment : BottomSheetDialogFragment(), OnBottomSheetCallbacks {
                 binding.textResult.text = this.getString(R.string.list_of_movies)
                 binding.indicatorImage.setImageResource(R.drawable.ic_baseline_expand_less_purple)
             }
-        }
-    }
-
-    private fun showLoading(state: Boolean) {
-        if (state) {
-            binding.progressBar.visibility = View.VISIBLE
-        } else {
-            binding.progressBar.visibility = View.GONE
         }
     }
 

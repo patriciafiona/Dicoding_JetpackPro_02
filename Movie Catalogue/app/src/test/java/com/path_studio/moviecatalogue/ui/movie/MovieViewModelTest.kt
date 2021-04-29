@@ -1,9 +1,8 @@
 package com.path_studio.moviecatalogue.ui.movie
 
-import org.junit.Test
-
 import org.junit.Assert.*
 import org.junit.Before
+import org.junit.Test
 
 class MovieViewModelTest {
 

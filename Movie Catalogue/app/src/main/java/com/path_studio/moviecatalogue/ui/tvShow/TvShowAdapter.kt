@@ -8,7 +8,6 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.path_studio.moviecatalogue.R
 import com.path_studio.moviecatalogue.data.TvShowEntity
-import com.path_studio.moviecatalogue.data.source.remote.response.ResultsItemTvShow
 import com.path_studio.moviecatalogue.databinding.ItemsMovieTvshowBinding
 import com.path_studio.moviecatalogue.ui.detailTvShow.DetailTvShowActivity
 import com.path_studio.moviecatalogue.util.Utils.changeStringToDateFormat

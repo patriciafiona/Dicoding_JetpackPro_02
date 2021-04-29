@@ -56,7 +56,6 @@ class MainActivityTest{
         onView(withId(R.id.movieSinopsis)).check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
         onView(withId(R.id.movieSinopsis)).check(matches(withText(dummyMovie[0].description)))
         onView(withId(R.id.btnFavoriteMovie)).check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
-        onView(withId(R.id.movieTrailer)).check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
         onView(withId(R.id.moviePoster)).check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
         onView(withId(R.id.movieBackdrop)).check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
 
@@ -97,7 +96,6 @@ class MainActivityTest{
         onView(withId(R.id.showSinopsis)).check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
         onView(withId(R.id.showSinopsis)).check(matches(withText(dummyTvShow[0].overview)))
         onView(withId(R.id.btnFavoriteshow)).check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
-        onView(withId(R.id.showTrailer)).check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
         onView(withId(R.id.showPoster)).check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
         onView(withId(R.id.showBackdrop)).check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
 

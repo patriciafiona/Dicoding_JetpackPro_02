@@ -1,8 +1,6 @@
 package com.path_studio.moviecatalogue.data
 
 import android.os.Parcelable
-import com.path_studio.moviecatalogue.data.source.remote.response.GenresItem02
-import com.path_studio.moviecatalogue.data.source.remote.response.SeasonsItem
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
