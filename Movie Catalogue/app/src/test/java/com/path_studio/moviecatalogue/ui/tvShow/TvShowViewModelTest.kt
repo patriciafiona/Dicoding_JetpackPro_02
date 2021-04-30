@@ -38,6 +38,7 @@ class TvShowViewModelTest {
 
     @Test
     fun getTvShows() {
+        val dummyTvShow= DataDummy.generateDummyTvShow()
         val shows = MutableLiveData<List<TvShowEntity>>()
         shows.value = DataDummy.generateDummyTvShow()
 
@@ -47,5 +48,8 @@ class TvShowViewModelTest {
         Mockito.verify(tmdbRepository).getDiscoverTvShow()
         assertNotNull(dataListShow)
         assertEquals(10, dataListShow?.size)
+
+        viewModel.getDiscoverTvShow().observeForever(observer)
+        Mockito.verify(observer).onChanged(dummyTvShow)
     }
 }

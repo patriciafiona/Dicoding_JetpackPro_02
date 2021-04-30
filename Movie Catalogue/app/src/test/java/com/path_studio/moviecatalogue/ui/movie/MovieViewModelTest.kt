@@ -37,6 +37,7 @@ class MovieViewModelTest {
 
     @Test
     fun getMovies() {
+        val dummyMovie= DataDummy.generateDummyMovie()
         val movie = MutableLiveData<List<MovieEntity>>()
         movie.value = DataDummy.generateDummyMovie()
 
@@ -46,5 +47,8 @@ class MovieViewModelTest {
         verify(tmdbRepository).getDiscoverMovies()
         assertNotNull(dataListMovie)
         assertEquals(10, dataListMovie?.size)
+
+        viewModel.getDiscoverMovies().observeForever(observer)
+        verify(observer).onChanged(dummyMovie)
     }
 }

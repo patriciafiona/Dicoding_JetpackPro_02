@@ -1,8 +1,10 @@
 package com.path_studio.moviecatalogue.util
 
-import com.path_studio.moviecatalogue.data.MovieEntity
-import com.path_studio.moviecatalogue.data.TvShowEntity
+import com.path_studio.moviecatalogue.data.*
 
+/*
+  Data Dummy for testing, Show all data already using TMDB API
+*/
 object DataDummy {
     fun generateDummyMovie(): List<MovieEntity> {
         val movies = ArrayList<MovieEntity>()
@@ -290,6 +292,100 @@ object DataDummy {
         )
 
         return shows
+    }
+
+    fun generateDummyDetailMovie(): List<DetailMovieEntity> {
+        val detailMovies = ArrayList<DetailMovieEntity>()
+
+        detailMovies.add(DetailMovieEntity(
+                527774,
+                "Raya and the Last Dragon",
+                "/7prYzufdIOy1KCTZKVWpjBFqqNr.jpg",
+                arrayListOf(
+                        "Animation",
+                        "Adventure",
+                        "Fantasy",
+                        "Family",
+                        "Action"
+                ),
+                2516,
+                "Long ago, in the fantasy world of Kumandra, humans and dragons lived together in harmony. " +
+                        "But when an evil force threatened the land, the dragons sacrificed themselves to save humanity. " +
+                        "Now, 500 years later, that same evil has returned and it’s up to a lone warrior, Raya, to track " +
+                        "down the legendary last dragon to restore the fractured land and its divided people.",
+                "Raya and the Last Dragon",
+                107,
+                "/lPsD10PP4rgUGiGR4CCXA6iY0QQ.jpg",
+                "2021-03-03",
+                8.3,
+            )
+        )
+
+        detailMovies.add(DetailMovieEntity(
+                460465,
+                "Mortal Kombat",
+                "/9yBVqNruk6Ykrwc32qrK2TIE5xw.jpg",
+                arrayListOf(
+                        "Fantasy",
+                        "Action",
+                        "Adventure",
+                        "Science Fiction",
+                        "Thriller"
+                ),
+                2516,
+                "Washed-up MMA fighter Cole Young, unaware of his heritage, and hunted by Emperor Shang Tsung's best warrior, " +
+                        "Sub-Zero, seeks out and trains with Earth's greatest champions as he prepares to stand against the enemies of Outworld " +
+                        "in a high stakes battle for the universe.",
+                "Mortal Kombat",
+                110,
+                "/6Wdl9N6dL0Hi0T1qJLWSz6gMLbd.jpg",
+                "2021-04-07",
+                7.9,
+            )
+        )
+
+        return detailMovies
+    }
+
+    fun generateDummyDetailTvShow(): List<DetailTvShowEntity> {
+        val detailTvShows = ArrayList<DetailTvShowEntity>()
+
+        detailTvShows.add(
+            DetailTvShowEntity(
+                88396,
+                "The Falcon and the Winter Soldier",
+                "/b0WmHGc8LHTdGCVzxRb3IBMur57.jpg",
+            arrayListOf(
+                "Sci-Fi & Fantasy",
+                "Action & Adventure",
+                "Drama",
+                "War & Politics"
+            ),
+                5043,
+                "Following the events of “Avengers: Endgame”, the Falcon, Sam Wilson and the Winter Soldier, " +
+                        "Bucky Barnes team up in a global adventure that tests their abilities, and their patience.",
+            arrayListOf(
+                TvShowSeasonEntity(
+                    "2021-03-19",
+                    6,
+                    156676,
+                    "Season 1",
+                    "",
+                    "/fIT6Y6O3cUX1X8qY8pZgzEvxUDQ.jpg",
+                    1
+                )
+            ),
+                "The Falcon and the Winter Soldier",
+                arrayListOf(
+                    50
+                ),
+                "/6kbAMLteGO8yyewYau6bJ683sw7.jpg",
+                "2021-03-19",
+                7.9
+            )
+        )
+
+        return detailTvShows
     }
 
 }
