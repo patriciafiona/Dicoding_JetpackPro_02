@@ -3,12 +3,11 @@ package com.path_studio.moviecatalogue.ui.detailTvShow
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
-import com.path_studio.moviecatalogue.data.DetailMovieEntity
 import com.path_studio.moviecatalogue.data.DetailTvShowEntity
 import com.path_studio.moviecatalogue.data.source.TmdbRepository
-import com.path_studio.moviecatalogue.ui.detailMovie.DetailMovieViewModel
 import com.path_studio.moviecatalogue.util.DataDummy
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test

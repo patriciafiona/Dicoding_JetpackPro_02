@@ -298,6 +298,29 @@ object DataDummy {
         val detailMovies = ArrayList<DetailMovieEntity>()
 
         detailMovies.add(DetailMovieEntity(
+            460465,
+            "Mortal Kombat",
+            "/9yBVqNruk6Ykrwc32qrK2TIE5xw.jpg",
+            arrayListOf(
+                "Fantasy",
+                "Action",
+                "Adventure",
+                "Science Fiction",
+                "Thriller"
+            ),
+            2516,
+            "Washed-up MMA fighter Cole Young, unaware of his heritage, and hunted by Emperor Shang Tsung's best warrior, " +
+                    "Sub-Zero, seeks out and trains with Earth's greatest champions as he prepares to stand against the enemies of Outworld " +
+                    "in a high stakes battle for the universe.",
+            "Mortal Kombat",
+            110,
+            "/6Wdl9N6dL0Hi0T1qJLWSz6gMLbd.jpg",
+            "2021-04-07",
+            7.9,
+        )
+        )
+
+        detailMovies.add(DetailMovieEntity(
                 527774,
                 "Raya and the Last Dragon",
                 "/7prYzufdIOy1KCTZKVWpjBFqqNr.jpg",
@@ -318,29 +341,6 @@ object DataDummy {
                 "/lPsD10PP4rgUGiGR4CCXA6iY0QQ.jpg",
                 "2021-03-03",
                 8.3,
-            )
-        )
-
-        detailMovies.add(DetailMovieEntity(
-                460465,
-                "Mortal Kombat",
-                "/9yBVqNruk6Ykrwc32qrK2TIE5xw.jpg",
-                arrayListOf(
-                        "Fantasy",
-                        "Action",
-                        "Adventure",
-                        "Science Fiction",
-                        "Thriller"
-                ),
-                2516,
-                "Washed-up MMA fighter Cole Young, unaware of his heritage, and hunted by Emperor Shang Tsung's best warrior, " +
-                        "Sub-Zero, seeks out and trains with Earth's greatest champions as he prepares to stand against the enemies of Outworld " +
-                        "in a high stakes battle for the universe.",
-                "Mortal Kombat",
-                110,
-                "/6Wdl9N6dL0Hi0T1qJLWSz6gMLbd.jpg",
-                "2021-04-07",
-                7.9,
             )
         )
 

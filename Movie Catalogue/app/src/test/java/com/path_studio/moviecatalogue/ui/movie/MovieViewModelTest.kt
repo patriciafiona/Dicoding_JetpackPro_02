@@ -6,7 +6,8 @@ import androidx.lifecycle.Observer
 import com.path_studio.moviecatalogue.data.MovieEntity
 import com.path_studio.moviecatalogue.data.source.TmdbRepository
 import com.path_studio.moviecatalogue.util.DataDummy
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
