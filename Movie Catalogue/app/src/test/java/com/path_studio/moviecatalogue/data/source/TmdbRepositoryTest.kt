@@ -1,18 +1,18 @@
 package com.path_studio.moviecatalogue.data.source
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.path_studio.moviecatalogue.data.source.remote.RemoteDataSource
-import com.path_studio.moviecatalogue.util.DataDummy
-import kotlinx.coroutines.runBlocking
-import org.junit.Rule
-import org.junit.Test
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.doAnswer
 import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.verify
+import com.path_studio.moviecatalogue.data.source.remote.RemoteDataSource
+import com.path_studio.moviecatalogue.util.DataDummy
 import com.path_studio.moviecatalogue.util.LiveDataTestUtil
+import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
+import org.junit.Rule
+import org.junit.Test
 import org.mockito.Mockito.mock
 
 class TmdbRepositoryTest{
