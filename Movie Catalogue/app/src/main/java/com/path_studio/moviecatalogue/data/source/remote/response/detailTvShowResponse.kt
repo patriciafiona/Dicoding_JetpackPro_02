@@ -94,9 +94,6 @@ data class DetailTvShowResponse(
 	@field:SerializedName("spoken_languages")
 	val spokenLanguages: List<SpokenLanguagesItem02?>? = null,
 
-	@field:SerializedName("production_companies")
-	val productionCompanies: List<Any?>? = null,
-
 	@field:SerializedName("original_name")
 	val originalName: String? = null,
 

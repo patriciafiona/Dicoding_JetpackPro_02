@@ -23,7 +23,7 @@ class RemoteDataSource {
                 }
     }
 
-    suspend fun getDiscoverMovie(callback: CallbackLoadDiscoverMovie){
+    suspend fun getDiscoverMovie(callback: CallbackLoadDiscoverMovie) {
         EspressoIdlingResource.increment()
         ApiConfig.getApiService().getDiscoverMovie(API_KEY, language).await().results.let{
                 listMovie -> callback.onMoviesRecieved((
