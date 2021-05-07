@@ -4,7 +4,7 @@
   <img src="https://user-images.githubusercontent.com/32255348/117399498-e7f4cf00-af2a-11eb-9d3d-b0ec4c7e9121.gif" width="300" />
 </p>
 
-<p align="center"><i><b>Figure 1</b> Preview of Github User App</i></p>
+<p align="center"><i><b>Figure 1</b> Preview of The Movie Database App</i></p>
 
 <br/>
 
