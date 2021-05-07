@@ -21,7 +21,7 @@ class TmdbRepositoryTest{
     var instantTaskExecutorRule = InstantTaskExecutorRule()
 
     private val remote = mock(RemoteDataSource::class.java)
-    private val TMDBRepository = FakeTmdbRepository(remote)
+    private val TmdbRepository = FakeTmdbRepository(remote)
 
     private val listMovieResponses = DataDummy.generateDummyMovieResponse()
     private val listTvShowResponses = DataDummy.generateDummyTvShowResponse()
@@ -41,7 +41,7 @@ class TmdbRepositoryTest{
             }.`when`(remote).getDiscoverMovie(any())
         }
 
-        val dataListMovie = LiveDataTestUtil.getValue(TMDBRepository.getDiscoverMovies())
+        val dataListMovie = LiveDataTestUtil.getValue(TmdbRepository.getDiscoverMovies())
 
         runBlocking {
             verify(remote).getDiscoverMovie(any())
@@ -60,7 +60,7 @@ class TmdbRepositoryTest{
             }.`when`(remote).getDiscoverTvShow(any())
         }
 
-        val dataListTvShow = LiveDataTestUtil.getValue(TMDBRepository.getDiscoverTvShow())
+        val dataListTvShow = LiveDataTestUtil.getValue(TmdbRepository.getDiscoverTvShow())
 
         runBlocking {
             verify(remote).getDiscoverTvShow(any())
@@ -79,7 +79,7 @@ class TmdbRepositoryTest{
             }.`when`(remote).getMovie(eq(movieId.toString()), any())
         }
 
-        val dataMovie = LiveDataTestUtil.getValue(TMDBRepository.getDetailMovie(movieId.toString()))
+        val dataMovie = LiveDataTestUtil.getValue(TmdbRepository.getDetailMovie(movieId.toString()))
 
         runBlocking {
             verify(remote).getMovie(eq(movieId.toString()), any())
@@ -98,7 +98,7 @@ class TmdbRepositoryTest{
             }.`when`(remote).getTvShow(eq(tvShowId.toString()), any())
         }
 
-        val dataTvShow = LiveDataTestUtil.getValue(TMDBRepository.getDetailTvShow(tvShowId.toString()))
+        val dataTvShow = LiveDataTestUtil.getValue(TmdbRepository.getDetailTvShow(tvShowId.toString()))
 
         runBlocking {
             verify(remote).getTvShow(eq(tvShowId.toString()), any())
