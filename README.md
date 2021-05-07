@@ -55,7 +55,7 @@ Adapun detail skenario testing aplikasi ini adalah sebagai berikut:
     - Melakukan pengecekan data list tv show apakah null atau tidak.
     - Melakukan pengecekan jumlah data list tv show apakah sudah sesuai atau belum.
 
--TmdbRepositoryTest
+- TmdbRepositoryTest
   - Memuat List Movie
     - Memanipulasi data ketika pemanggilan response list movie dengan data dummy
     - Memastikan metode pemanggilan response list movie terpanggil
