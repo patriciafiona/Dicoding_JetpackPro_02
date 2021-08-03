@@ -8,7 +8,7 @@
 
 <br/>
 
-Result of Renew my Dicoding: "Belajar Android Jetpack Pro" Certificate (Submission 02: Repository dan LiveData)
+Result of my Dicoding: "Belajar Android Jetpack Pro" Certificate (Submission 02: Repository dan LiveData)
 
 ## Information
 <p align="center">
